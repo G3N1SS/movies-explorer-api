@@ -4,6 +4,9 @@ const Movie = require('../models/movie');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const {
+  wrongId, unknownCardId, anotherUserCard, deletedCard,
+} = require('../config');
 
 module.exports.addNewMovie = (req, res, next) => {
   const {
@@ -57,18 +60,18 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail()
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id.toString()) {
-        throw new ForbiddenError('Карточка фильма другого пользователя');
+        throw new ForbiddenError(anotherUserCard);
       }
       Movie.deleteOne(movie)
         .then(() => {
-          res.status(HTTP_STATUS_OK).send({ message: 'Карточка удалена' });
+          res.status(HTTP_STATUS_OK).send({ message: deletedCard });
         });
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.CastError) {
-        next(new BadRequestError('неправильный _id'));
+        next(new BadRequestError(wrongId));
       } else if (error instanceof mongoose.Error.DocumentNotFoundError) {
-        next(new NotFoundError('Карточка с данным _id не найдена.'));
+        next(new NotFoundError(unknownCardId));
       } else {
         next(error);
       }

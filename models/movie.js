@@ -1,55 +1,57 @@
 const mongoose = require('mongoose');
-const urlRegex = require('../utils/constants');
+const {
+  urlRegex, requiredField, filmPosterUrl, filmTrailerUrl,
+} = require('../config');
 
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   director: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   duration: {
     type: Number,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   year: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   description: {
     type: String,
-    required: [true, 'Обязательно поле!'],
+    required: [true, requiredField],
   },
   image: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
     validate: {
       validator(v) {
         return urlRegex.test(v);
       },
-      message: 'Введите URL постера к фильму',
+      message: filmPosterUrl,
     },
   },
   trailerLink: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
     validate: {
       validator(v) {
         return urlRegex.test(v);
       },
-      message: 'Введите URL трейлера фильма',
+      message: filmTrailerUrl,
     },
   },
   thumbnail: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
     validate: {
       validator(v) {
         return urlRegex.test(v);
       },
-      message: 'Введите URL постера к фильму',
+      message: filmPosterUrl,
     },
   },
   owner: {
@@ -59,15 +61,15 @@ const movieSchema = new mongoose.Schema({
   },
   movieId: {
     type: Number,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   nameRU: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
   nameEN: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
   },
 }, { versionKey: false });
 

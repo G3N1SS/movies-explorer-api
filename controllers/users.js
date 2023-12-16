@@ -8,6 +8,7 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
+const { alreadyInUse, unknownUserId } = require('../config');
 
 module.exports.getMeUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -21,10 +22,12 @@ module.exports.editUserData = (req, res, next) => {
     .orFail()
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
+      if (err.code === 11000) {
+        next(new ConflictError(alreadyInUse(email)));
+      } else if (err instanceof mongoose.Error.ValidationError) {
         next(new BadRequestError(err.message));
       } else if (err instanceof mongoose.Error.DocumentNotFoundError) {
-        next(new NotFoundError(`Пользователь по указанному _id: ${req.user._id} не найден.`));
+        next(new NotFoundError(unknownUserId(req.user._id)));
       } else {
         next(err);
       }
@@ -44,7 +47,7 @@ module.exports.addNewUser = (req, res, next) => {
       }))
       .catch((err) => {
         if (err.code === 11000) {
-          next(new ConflictError(`Пользователь с email: ${email} уже зарегистрирован`));
+          next(new ConflictError(alreadyInUse(email)));
         } else if (err instanceof mongoose.Error.ValidationError) {
           next(new BadRequestError(err.message));
         } else {
