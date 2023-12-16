@@ -2,28 +2,31 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const UnautorizedError = require('../errors/UnautorizedError');
+const {
+  requiredField, correctEmail, wrongEmailOrPassword, minlength, maxlength,
+} = require('../config');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: [2, 'Минимальная длина поля - 2'],
-    maxlength: [30, 'Максимальная длина поля - 30'],
-    required: [true, 'Обязательное поле!'],
+    minlength: [2, minlength],
+    maxlength: [30, maxlength],
+    required: [true, requiredField],
   },
   email: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
     unique: true,
     validate: {
       validator(email) {
         validator.isEmail(email);
       },
-      message: 'Введите верный email',
+      message: correctEmail,
     },
   },
   password: {
     type: String,
-    required: [true, 'Обязательное поле!'],
+    required: [true, requiredField],
     select: false,
   },
 }, { versionKey: false });
@@ -33,12 +36,12 @@ userSchema.statics.findUserByCredentials = async function findUserByCredentials(
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnautorizedError('Неправильные почта или пароль');
+        throw new UnautorizedError(wrongEmailOrPassword);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new UnautorizedError('Неправильные почта или пароль');
+            throw new UnautorizedError(wrongEmailOrPassword);
           }
           return user;
         });
