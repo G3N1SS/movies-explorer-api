@@ -20,10 +20,10 @@ const unknownCardId = 'Карточка с данным _id не найдена.
 const anotherUserCard = 'Карточка фильма другого пользователя.';
 const deletedCard = 'Карточка удалена.';
 const alreadyInUse = (email) => `Пользователь с email: ${email} уже зарегистрирован.`;
-const unknownUserId = (userId) => `Пользователь по указанному _id ${userId} не найден.`
-const authorizationNeeded = 'Необходима авторизация.'
-const serverError = 'На сервере произошла ошибка.'
-const notFoundPage = 'Сожалеем, но страница не найдена.'
+const unknownUserId = (userId) => `Пользователь по указанному _id ${userId} не найден.`;
+const authorizationNeeded = 'Необходима авторизация.';
+const serverError = 'На сервере произошла ошибка.';
+const notFoundPage = 'Сожалеем, но страница не найдена.';
 
 module.exports = {
   urlRegex,
@@ -44,5 +44,5 @@ module.exports = {
   unknownUserId,
   authorizationNeeded,
   serverError,
-  notFoundPage
+  notFoundPage,
 };
