@@ -7,7 +7,7 @@ const cors = require('cors');
 const { errors } = require('celebrate');
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { limiter, DB_ADDRESS } = require('./config');
+const { limiter, DB_ADDRESS = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = require('./config');
 
 const { PORT = 3000 } = process.env;
 const app = express();

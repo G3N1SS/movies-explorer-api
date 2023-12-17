@@ -1,4 +1,4 @@
-const { celebrate, Joi } = require('celebrate')
+const { celebrate, Joi } = require('celebrate');
 const urlRegex = require('./config');
 // signin
 const signInValidation = celebrate({
@@ -6,13 +6,13 @@ const signInValidation = celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(3),
   }),
-})
+});
 // movies
 const deleteMovieValidation = celebrate({
   params: Joi.object().keys({
     movieId: Joi.string().length(24).hex().required(),
   }),
-})
+});
 
 const postMovieValidation = celebrate({
   body: Joi.object().keys({
@@ -28,7 +28,7 @@ const postMovieValidation = celebrate({
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
-})
+});
 
 // signup
 const signUpValidation = celebrate({
@@ -37,19 +37,19 @@ const signUpValidation = celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(3),
   }),
-})
+});
 // users
 const userPatchValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     email: Joi.string().min(2).max(30),
   }),
-})
+});
 
 module.exports = {
   signInValidation,
   deleteMovieValidation,
   postMovieValidation,
   signUpValidation,
-  userPatchValidation
-}
+  userPatchValidation,
+};
