@@ -50,7 +50,6 @@ module.exports.addNewMovie = (req, res, next) => {
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    // .populate(['owner', 'likes'])
     .then((movies) => res.status(HTTP_STATUS_OK).send(movies))
     .catch(next);
 };
